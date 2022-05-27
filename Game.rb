@@ -1,6 +1,5 @@
 require_relative 'Deck.rb'
 require_relative 'Board.rb'
-require_relative 'Utils'
 
 class Game
     attr_accessor :deck, :board, :game, :card_selected, :set_result, :game_over
@@ -93,7 +92,7 @@ class Game
             @card_selected.clear
             @board.remove_cards(three_cards)
             # add three more cards to the board
-            @board.add_three_cards
+            @board.add_three_cards(@deck)
             # set the coordinates of the board when the board is changed
             @board.set_card_coord
             # check if the game is over when the deck is empty

@@ -24,8 +24,7 @@ class GameScreen < Gosu::Window
         @button_hint = Button.new('Hint', 1080, 300, @font_button.text_width("Hint"), @font_button.height)
         @button_restart = Button.new('Restart', 1080, 365, @font_button.text_width("Restart"), @font_button.height)
         @button_pause = Button.new('Pause', 1080, 430, @font_button.text_width("Pause"), @font_button.height)
-        
-        @is_clicked = false
+      
         # start
     end
 
@@ -46,6 +45,14 @@ class GameScreen < Gosu::Window
         draw_messages
     end
 
+     # update the screen when a card is selected && a button is clicked
+     def button_down(id)
+        if id == Gosu::MsLeft && MouseHoverController.mouse_over_card(mouse_x, mouse_y, @board.board)
+            index = MouseHoverController.mouse_over_card(mouse_x, mouse_y, @board.board)
+            @game.update_board!(index)
+        end
+    end 
+
     def needs_cursor?
         true
     end
@@ -54,18 +61,6 @@ class GameScreen < Gosu::Window
     # def mouse_over_card
     #     @board.board.index { |index| MouseHoverController.mouse_over_object?(mouse_x, mouse_y, @board.board[index]) }
     # end
-
-    # update the screen when a card is selected && a button is clicked
-    def button_down(id)
-        if id == Gosu::MsLeft && MouseHoverController.mouse_over_card(mouse_x, mouse_y, @board.board)
-            @is_clicked = true
-            index = MouseHoverController.mouse_over_card(mouse_x, mouse_y, @board.board)
-            @game.update_board!(index)
-        elsif id == Gosu::MsLeft && @is_clicked == true
-            @is_clicked == false
-            # @game.update_board!(index)
-        end
-    end 
 
     # Redrawing only when necessary
     # def needs_redraw?
@@ -88,10 +83,13 @@ class GameScreen < Gosu::Window
         @button_pause.draw
     end
 
-
     def draw_messages
         @font.draw_text("Sets on the board: #{@game.sets_on_board}", 950, 75, 0, 1.0, 1.0, Gosu::Color::BLUE)
         @font.draw_text("Cards remaining: #{@game.deck.deck.length + @board.board.length}", 950, 125, 0, 1.0, 1.0, Gosu::Color::WHITE)
+        if @game.set_result == false
+            @font.draw_text("This is not a set!", 950, 175, 0, 1.0, 1.0, Gosu::Color::WHITE)
+            @font.draw_text("", 950, 175, 0, 1.0, 1.0, Gosu::Color::WHITE) 
+        end
     end
 
 end
