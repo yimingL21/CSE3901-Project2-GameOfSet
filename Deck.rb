@@ -17,7 +17,7 @@ class Deck
             shapes.each do |shape|
                 colors.each do |color|
                     shading.each do |shade|
-                        card = Card.new(number, shape, color, shade)
+                        card = Card.new(number, shape, color, shade, 0, 0)
                         @deck << card
                     end
                 end
@@ -43,7 +43,7 @@ class Deck
         for card in @deck
             @deck_string << card.card_to_string
         end
-        @deck_string
+        return @deck_string
     end
 
 end
